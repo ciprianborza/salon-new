@@ -1,0 +1,38 @@
+# Ignoră node_modules
+node_modules/
+
+# Ignoră fișiere de mediu
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# Ignoră configurările Vercel
+.vercel
+.vercel/cache
+
+# Ignoră directoare de build
+dist/
+build/
+
+# Ignoră fișiere de log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignoră fișiere cache
+.cache/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Ignoră fișiere generate de Webpack și Babel
+*.cache
+*.babelrc
+*.eslintcache
+
+# Ignoră fișierele create de sistemul de operare
+*.swp
+*.swo
+.idea/
