@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./styles.css";
 
-const API_URL = "https://salon-backend-1i9q.onrender.com";
+const API_URL = "https://salon-backend-1i9q.onrender.com"; // 🔹 Asigură-te că backend-ul este activ
 
 const SalonAppointments = () => {
   const [appointments, setAppointments] = useState([]);
@@ -53,7 +53,29 @@ const SalonAppointments = () => {
     }
   };
 
-  // 🔹 4. Funcție pentru gruparea programărilor pe zile și sortarea după oră
+  // 🔹 4. Șterge o programare din MongoDB și actualizează lista
+  const handleDelete = async (id) => {
+    console.log(`🔹 Se încearcă ștergerea programării cu ID: ${id}`); // Debugging
+
+    try {
+      const response = await fetch(`${API_URL}/appointments/${id}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        console.log(`✅ Programarea cu ID ${id} a fost ștearsă`); // Debugging
+        setAppointments(appointments.filter((appt) => appt._id !== id));
+        setConfirmationMessage("❌ Programarea a fost ștearsă!");
+        setTimeout(() => setConfirmationMessage(""), 3000);
+      } else {
+        console.error(`⚠️ Eroare la ștergerea programării cu ID ${id}: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("❌ Eroare la ștergerea programării:", error);
+    }
+  };
+
+  // 🔹 5. Funcție pentru gruparea programărilor pe zile și sortarea după oră
   const groupedAppointments = appointments.reduce((acc, appt) => {
     if (!acc[appt.date]) {
       acc[appt.date] = [];
@@ -62,14 +84,14 @@ const SalonAppointments = () => {
     return acc;
   }, {});
 
-  // 🔹 5. Sortează programările după oră
-  Object.keys(groupedAppointments).forEach(date => {
+  // 🔹 6. Sortează programările după oră
+  Object.keys(groupedAppointments).forEach((date) => {
     groupedAppointments[date].sort((a, b) => a.time.localeCompare(b.time));
   });
 
   return (
     <div className="container">
-      <h1>📅 Programări Salon</h1>
+      <h1>📅 Programări Natalie Studio</h1>
       <form onSubmit={handleSubmit} className="appointment-form">
         <input type="text" placeholder="Nume" value={name} onChange={(e) => setName(e.target.value)} required />
         <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
@@ -80,7 +102,16 @@ const SalonAppointments = () => {
           <option value="Vopsit">Vopsit</option>
           <option value="Coafat">Coafat</option>
         </select>
-        <button type="submit" style={{ backgroundColor: isFormComplete ? "blue" : "lightgray", color: isFormComplete ? "white" : "black" }} disabled={!isFormComplete}>Adaugă programare</button>
+        <button
+          type="submit"
+          style={{
+            backgroundColor: isFormComplete ? "blue" : "lightgray",
+            color: isFormComplete ? "white" : "black",
+          }}
+          disabled={!isFormComplete}
+        >
+          Adaugă programare
+        </button>
       </form>
 
       {confirmationMessage && <p className="confirmation-message">{confirmationMessage}</p>}
@@ -92,20 +123,31 @@ const SalonAppointments = () => {
       </div>
       <div className="appointments-container">
         <div className="appointments-box">
-          {Object.keys(groupedAppointments).sort().map((date) => (
-            (!filterDate || filterDate === date) && (
-              <div key={date} className="appointment-day">
-                <h3>📅 {new Date(date).toLocaleDateString("ro-RO", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</h3>
-                <ul className="appointment-list">
-                  {groupedAppointments[date].map((appt, index) => (
-                    <li key={index}>
-                      <strong>{appt.name}</strong> - {appt.time} ({appt.service})
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )
-          ))}
+          {Object.keys(groupedAppointments)
+            .sort()
+            .map((date) =>
+              (!filterDate || filterDate === date) && (
+                <div key={date} className="appointment-day">
+                  <h3>
+                    📅{" "}
+                    {new Date(date).toLocaleDateString("ro-RO", {
+                      weekday: "long",
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </h3>
+                  <ul className="appointment-list">
+                    {groupedAppointments[date].map((appt, index) => (
+                      <li key={index}>
+                        <strong>{appt.name}</strong> - {appt.time} ({appt.service})
+                        <button className="delete-btn" onClick={() => handleDelete(appt._id)}>🗑 Șterge</button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )
+            )}
         </div>
       </div>
     </div>

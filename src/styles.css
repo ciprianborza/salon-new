@@ -15,6 +15,14 @@ body {
 }
 
 .appointment-form input,
+.appointment-form input[type="text"] {
+  width: 95%;
+  max-width: 900px;
+  height: 25px; /* Crește înălțimea câmpului */
+  font-size: 16px; /* O mărime mai vizibilă a textului */
+  padding: 5px; /* Spațiu în interior pentru aspect mai aerisit */
+  margin: auto;
+}
 .appointment-form select,
 .appointment-form button {
   width: 100%;
