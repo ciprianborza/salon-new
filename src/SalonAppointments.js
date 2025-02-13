@@ -13,7 +13,7 @@ const SalonAppointments = () => {
   const [isFormComplete, setIsFormComplete] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState("");
 
-  // 🔹 1. Preia programările din MongoDB și le grupează pe zile
+  // 🔹 1. Preia programările din MongoDB
   useEffect(() => {
     fetch(`${API_URL}/appointments`)
       .then((res) => res.json())
@@ -55,15 +55,12 @@ const SalonAppointments = () => {
 
   // 🔹 4. Șterge o programare din MongoDB și actualizează lista
   const handleDelete = async (id) => {
-    console.log(`🔹 Se încearcă ștergerea programării cu ID: ${id}`); // Debugging
-
     try {
       const response = await fetch(`${API_URL}/appointments/${id}`, {
         method: "DELETE",
       });
 
       if (response.ok) {
-        console.log(`✅ Programarea cu ID ${id} a fost ștearsă`); // Debugging
         setAppointments(appointments.filter((appt) => appt._id !== id));
         setConfirmationMessage("❌ Programarea a fost ștearsă!");
         setTimeout(() => setConfirmationMessage(""), 3000);
@@ -75,16 +72,26 @@ const SalonAppointments = () => {
     }
   };
 
-  // 🔹 5. Funcție pentru gruparea programărilor pe zile și sortarea după oră
-  const groupedAppointments = appointments.reduce((acc, appt) => {
-    if (!acc[appt.date]) {
-      acc[appt.date] = [];
+  // 🔹 5. Generează lista de zile de la azi până la 3 luni în viitor
+  const generateDateList = () => {
+    const today = new Date();
+    const dateList = [];
+    for (let i = 0; i <= 90; i++) {
+      const futureDate = new Date(today);
+      futureDate.setDate(today.getDate() + i);
+      const formattedDate = futureDate.toISOString().split("T")[0];
+      dateList.push(formattedDate);
     }
-    acc[appt.date].push(appt);
+    return dateList;
+  };
+
+  // 🔹 6. Gruparea programărilor pe zile și sortarea după oră
+  const groupedAppointments = generateDateList().reduce((acc, date) => {
+    acc[date] = appointments.filter((appt) => appt.date === date);
     return acc;
   }, {});
 
-  // 🔹 6. Sortează programările după oră
+  // 🔹 7. Sortează programările după oră
   Object.keys(groupedAppointments).forEach((date) => {
     groupedAppointments[date].sort((a, b) => a.time.localeCompare(b.time));
   });
@@ -100,7 +107,8 @@ const SalonAppointments = () => {
           <option value="">Alege un serviciu</option>
           <option value="Tuns">Tuns</option>
           <option value="Vopsit">Vopsit</option>
-          <option value="Coafat">Coafat</option>
+          <option value="Aranjat">Aranjat</option>
+          <option value="Baleiaj">Baleiaj</option>
         </select>
         <button
           type="submit"
@@ -137,14 +145,18 @@ const SalonAppointments = () => {
                       day: "numeric",
                     })}
                   </h3>
-                  <ul className="appointment-list">
-                    {groupedAppointments[date].map((appt, index) => (
-                      <li key={index}>
-                        <strong>{appt.name}</strong> - {appt.time} ({appt.service})
-                        <button className="delete-btn" onClick={() => handleDelete(appt._id)}>🗑 Șterge</button>
-                      </li>
-                    ))}
-                  </ul>
+                  {groupedAppointments[date].length > 0 ? (
+                    <ul className="appointment-list">
+                      {groupedAppointments[date].map((appt, index) => (
+                        <li key={index} className="confirmed-appointment">
+                          <strong>{appt.name}</strong> - {appt.time} ({appt.service})
+                          <button className="delete-btn" onClick={() => handleDelete(appt._id)}>🗑 Șterge</button>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="no-appointments">Fara programari!</p>
+                  )}
                 </div>
               )
             )}
