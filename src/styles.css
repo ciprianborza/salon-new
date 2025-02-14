@@ -8,7 +8,7 @@ body {
 .container {
   max-width: 400px;
   margin: auto;
-  background: #C8A2C8;
+  background:  #C9A0DC;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -18,7 +18,7 @@ body {
 .appointment-form input[type="text"] {
   width: 95%;
   max-width: 900px;
-  background: #D8BFD8;
+  background: #E6E6FA;
   height: 25px; /* Crește înălțimea câmpului */
   font-size: 16px; /* O mărime mai vizibilă a textului */
   padding: 5px; /* Spațiu în interior pentru aspect mai aerisit */
@@ -28,7 +28,7 @@ body {
 .appointment-form button {
   width: 100%;
   padding: 10px;
-  background: #D8BFD8;
+  background: #E6E6FA;
   height: 40px;
   margin: 10px 0;
   border: 1px solid #ccc;
@@ -37,7 +37,7 @@ body {
 
 .appointment-list {
   list-style: none;
-  background: #D8BFD8;
+  background: #E6E6FA;
   padding: 0;
 }
 
@@ -49,18 +49,18 @@ body {
 }
 .appointments-container {
   display: flex;
-  background: #D8BFD8;
+  background: #C9A0DC;
   justify-content: center;
   margin-top: 20px;
 }
 
 .appointments-box {
-  border: 2px solid;
-  background: #D8BFD8;
+  border: 3px solid;
+  background: #C9A0DC;
   padding: 15px;
   border-radius: 8px;
-  width: 80%;
-  max-width: 600px;
+  width: 90%;
+  max-width: 800px;
 }
 
 .confirmation-message {
