@@ -107,8 +107,12 @@ const SalonAppointments = () => {
           <option value="">Alege un serviciu</option>
           <option value="Tuns">Tuns</option>
           <option value="Vopsit">Vopsit</option>
+          <option value="Tuns+Vopsit">Tuns+Vopsit</option>
           <option value="Aranjat">Aranjat</option>
           <option value="Baleiaj">Baleiaj</option>
+          <option value="Decorolat">Decolorat</option>
+          <option value="Suvite">Suvite</option>
+          <option value="Intretinere">Intretinere</option>
         </select>
         <button
           type="submit"
