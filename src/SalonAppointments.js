@@ -13,6 +13,21 @@ const SalonAppointments = () => {
   const [isFormComplete, setIsFormComplete] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState("");
 
+// 🔹 Efect pentru a păstra backend-ul activ
+  useEffect(() => {
+    const keepBackendAlive = () => {
+      fetch(`${API_URL}/keep-alive`).catch((err) =>
+        console.error("❌ Eroare la păstrarea activă a backend-ului:", err)
+      );
+    };
+
+    // Rulează la fiecare 5 minute (300.000 ms)
+    const interval = setInterval(keepBackendAlive, 300000);
+
+    // Curăță intervalul la demontarea componentului
+    return () => clearInterval(interval);
+  }, []);
+
   // 🔹 1. Preia programările din MongoDB
   useEffect(() => {
     fetch(`${API_URL}/appointments`)
