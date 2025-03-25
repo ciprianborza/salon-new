@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./styles.css";
 
-//const API_URL = "https://salon-backend-1i9q.onrender.com"; // 🔹 Asigură-te că backend-ul este activ
-//const API_URL = "https://salon-backend-production-730b.up.railway.app";
-
-console.log("🔍 Valoare API_URL:", API_URL);
-
 const SalonAppointments = () => {
   const API_URL = process.env.REACT_APP_API_URL;
+
   const [appointments, setAppointments] = useState([]);
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
@@ -17,7 +13,6 @@ const SalonAppointments = () => {
   const [isFormComplete, setIsFormComplete] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState("");
 
-// 🔹 Efect pentru a păstra backend-ul activ
   useEffect(() => {
     const keepBackendAlive = () => {
       fetch(`${API_URL}/keep-alive`).catch((err) =>
@@ -25,27 +20,21 @@ const SalonAppointments = () => {
       );
     };
 
-    // Rulează la fiecare 5 minute (300.000 ms)
     const interval = setInterval(keepBackendAlive, 300000);
-
-    // Curăță intervalul la demontarea componentului
     return () => clearInterval(interval);
-  }, []);
+  }, [API_URL]);
 
-  // 🔹 1. Preia programările din MongoDB
   useEffect(() => {
     fetch(`${API_URL}/appointments`)
       .then((res) => res.json())
       .then((data) => setAppointments(data))
       .catch((err) => console.error("❌ Eroare la preluarea programărilor:", err));
-  }, []);
+  }, [API_URL]);
 
-  // 🔹 2. Verifică dacă formularul este complet
   useEffect(() => {
     setIsFormComplete(name && date && time && service);
   }, [name, date, time, service]);
 
-  // 🔹 3. Salvează programarea în MongoDB
   const handleSubmit = async (e) => {
     e.preventDefault();
     const appointment = { name, date, time, service };
@@ -72,7 +61,6 @@ const SalonAppointments = () => {
     }
   };
 
-  // 🔹 4. Șterge o programare din MongoDB și actualizează lista
   const handleDelete = async (id) => {
     try {
       const response = await fetch(`${API_URL}/appointments/${id}`, {
@@ -91,7 +79,6 @@ const SalonAppointments = () => {
     }
   };
 
-  // 🔹 5. Generează lista de zile de la azi până la 3 luni în viitor
   const generateDateList = () => {
     const today = new Date();
     const dateList = [];
@@ -104,13 +91,11 @@ const SalonAppointments = () => {
     return dateList;
   };
 
-  // 🔹 6. Gruparea programărilor pe zile și sortarea după oră
   const groupedAppointments = generateDateList().reduce((acc, date) => {
     acc[date] = appointments.filter((appt) => appt.date === date);
     return acc;
   }, {});
 
-  // 🔹 7. Sortează programările după oră
   Object.keys(groupedAppointments).forEach((date) => {
     groupedAppointments[date].sort((a, b) => a.time.localeCompare(b.time));
   });
