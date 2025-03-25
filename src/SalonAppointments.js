@@ -3,12 +3,11 @@ import "./styles.css";
 
 //const API_URL = "https://salon-backend-1i9q.onrender.com"; // 🔹 Asigură-te că backend-ul este activ
 //const API_URL = "https://salon-backend-production-730b.up.railway.app";
-const API_URL = process.env.REACT_APP_API_URL;
-
 
 console.log("🔍 Valoare API_URL:", API_URL);
 
 const SalonAppointments = () => {
+  const API_URL = process.env.REACT_APP_API_URL;
   const [appointments, setAppointments] = useState([]);
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
