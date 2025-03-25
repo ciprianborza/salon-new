@@ -19,7 +19,6 @@ const SalonAppointments = () => {
         console.error("❌ Eroare la păstrarea activă a backend-ului:", err)
       );
     };
-
     const interval = setInterval(keepBackendAlive, 300000);
     return () => clearInterval(interval);
   }, [API_URL]);
