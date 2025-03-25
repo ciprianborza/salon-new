@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./styles.css";
 
 // ✅ Variabila de mediu compatibilă cu Vercel (CRA)
-const API_URL = process.env.REACT_APP_API_URL || "https://salon-backend-production-730b.up.railway.app";
+const API_URL = import.meta.env.VITE_API_URL || "https://salon-backend-production-730b.up.railway.app";
+
 
 console.log("🔍 Valoare API_URL:", API_URL);
 
