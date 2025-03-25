@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./styles.css";
 
 const SalonAppointments = () => {
-  // ✅ API_URL mutat corect în interiorul funcției
-  const API_URL = process.env.REACT_APP_API_URL;
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
   const [appointments, setAppointments] = useState([]);
   const [name, setName] = useState("");
