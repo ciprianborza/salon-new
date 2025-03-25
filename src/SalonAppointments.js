@@ -172,5 +172,4 @@ const SalonAppointments = () => {
     </div>
   );
 };
-
 export default SalonAppointments;
