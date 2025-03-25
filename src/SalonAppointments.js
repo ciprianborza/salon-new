@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "./styles.css";
 
-// 🔧 Folosește variabila de mediu dacă e disponibilă, altfel fallback la Railway
-const API_URL = import.meta.env.VITE_API_URL || "https://salon-backend-production-730b.up.railway.app";
+// ✅ Variabila de mediu compatibilă cu Vercel (CRA)
+const API_URL = process.env.REACT_APP_API_URL || "https://salon-backend-production-730b.up.railway.app";
 
-console.log("🌐 API_URL:", API_URL);
+console.log("🔍 Valoare API_URL:", API_URL);
 
 const SalonAppointments = () => {
   const [appointments, setAppointments] = useState([]);
@@ -22,7 +22,6 @@ const SalonAppointments = () => {
         console.error("❌ Eroare la păstrarea activă a backend-ului:", err)
       );
     };
-
     const interval = setInterval(keepBackendAlive, 300000);
     return () => clearInterval(interval);
   }, []);
@@ -117,7 +116,7 @@ const SalonAppointments = () => {
           <option value="Tuns+Vopsit">Tuns+Vopsit</option>
           <option value="Aranjat">Aranjat</option>
           <option value="Baleiaj">Baleiaj</option>
-          <option value="Decolorat">Decolorat</option>
+          <option value="Decorolat">Decolorat</option>
           <option value="Suvite">Suvite</option>
           <option value="Intretinere">Intretinere</option>
         </select>
@@ -166,7 +165,7 @@ const SalonAppointments = () => {
                       ))}
                     </ul>
                   ) : (
-                    <p className="no-appointments">Fără programări!</p>
+                    <p className="no-appointments">Fara programari!</p>
                   )}
                 </div>
               )
