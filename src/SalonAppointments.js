@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./styles.css";
 
-const SalonAppointments = () => {
-  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+// 🔧 Folosește variabila de mediu dacă e disponibilă, altfel fallback la Railway
+const API_URL = import.meta.env.VITE_API_URL || "https://salon-backend-production-730b.up.railway.app";
 
+console.log("🌐 API_URL:", API_URL);
+
+const SalonAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
@@ -19,16 +22,17 @@ const SalonAppointments = () => {
         console.error("❌ Eroare la păstrarea activă a backend-ului:", err)
       );
     };
+
     const interval = setInterval(keepBackendAlive, 300000);
     return () => clearInterval(interval);
-  }, [API_URL]);
+  }, []);
 
   useEffect(() => {
     fetch(`${API_URL}/appointments`)
       .then((res) => res.json())
       .then((data) => setAppointments(data))
       .catch((err) => console.error("❌ Eroare la preluarea programărilor:", err));
-  }, [API_URL]);
+  }, []);
 
   useEffect(() => {
     setIsFormComplete(name && date && time && service);
@@ -113,7 +117,7 @@ const SalonAppointments = () => {
           <option value="Tuns+Vopsit">Tuns+Vopsit</option>
           <option value="Aranjat">Aranjat</option>
           <option value="Baleiaj">Baleiaj</option>
-          <option value="Decorolat">Decolorat</option>
+          <option value="Decolorat">Decolorat</option>
           <option value="Suvite">Suvite</option>
           <option value="Intretinere">Intretinere</option>
         </select>
@@ -162,7 +166,7 @@ const SalonAppointments = () => {
                       ))}
                     </ul>
                   ) : (
-                    <p className="no-appointments">Fara programari!</p>
+                    <p className="no-appointments">Fără programări!</p>
                   )}
                 </div>
               )
