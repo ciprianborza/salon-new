@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./styles.css";
 
 const SalonAppointments = () => {
+  // ✅ API_URL mutat corect în interiorul funcției
   const API_URL = process.env.REACT_APP_API_URL;
 
   const [appointments, setAppointments] = useState([]);
@@ -172,4 +173,5 @@ const SalonAppointments = () => {
     </div>
   );
 };
+
 export default SalonAppointments;
